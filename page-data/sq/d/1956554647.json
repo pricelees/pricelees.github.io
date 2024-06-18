@@ -1,1 +1,1 @@
-{"data":{"allMarkdownRemark":{"edges":[{"node":{"frontmatter":{"title":"안녕하세요!","categories":"Welcome"},"fields":{"slug":"/hello/"}}}]}}}
+{"data":{"allMarkdownRemark":{"edges":[{"node":{"frontmatter":{"title":"Layered Architecture 적용 과정에서의 DTO 사용에 대한 고민","categories":"level2 Spring"},"fields":{"slug":"/woowacourse/level2/Layered_Architecture_적용_과정에서의_DTO_사용에_대한_고민/"}}},{"node":{"frontmatter":{"title":"안녕하세요!","categories":"Welcome"},"fields":{"slug":"/hello/"}}}]}}}
