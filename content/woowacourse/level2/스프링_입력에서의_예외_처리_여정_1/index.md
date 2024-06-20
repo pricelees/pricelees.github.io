@@ -1,7 +1,7 @@
 ---
 emoji: '🌱'
 title: 스프링 입력에서의 예외 처리 여정 1 - 문제 인식 및 일부 해결
-date: '2024-05-10 19:00:00'
+date: '2024-06-18 19:00:00'
 author: 이상진
 tags: 안녕하세요!
 categories: level2 Spring Exception

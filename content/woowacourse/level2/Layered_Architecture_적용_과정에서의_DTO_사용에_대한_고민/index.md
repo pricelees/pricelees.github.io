@@ -1,7 +1,7 @@
 ---
 emoji: '🌱'
 title: Layered Architecture 적용 과정에서의 DTO 사용에 대한 고민
-date: '2024-05-01 19:00:00'
+date: '2024-06-17 19:00:00'
 author: 이상진
 tags: 안녕하세요!
 categories: level2 Spring 
