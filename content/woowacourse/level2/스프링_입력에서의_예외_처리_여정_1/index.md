@@ -28,10 +28,10 @@ POST /reservations HTTP/1.1
 content-type: application/json
 
 {
-"date": "2024-05-10",
-"memberId": "1",
-"themeId": "1",
-"timeId": "1"
+   "date": "2024-05-10",
+   "memberId": "1",
+   "themeId": "1",
+   "timeId": "1"
 }
 ```
 
@@ -47,9 +47,9 @@ POST /themes HTTP/1.1
 content-type: application/json
 
 {
-"description": "테마 설명",
-"name": "테마 이름",
-"thumbnail": "테마 썸네일 사진 URL"
+   "description": "테마 설명",
+   "name": "테마 이름",
+   "thumbnail": "테마 썸네일 사진 URL"
 }
 ```
 
@@ -64,7 +64,7 @@ POST /times HTTP/1.1
 content-type: application/json
 
 {
-"startAt": "HH:mm"
+    "startAt": "HH:mm"  
 }
 ```
 
@@ -96,8 +96,7 @@ public record ThemeCreateRequest(
 **만약 값을 입력하지 않으면** 어떤 형태로 요청이 될까요? 테마를 추가할 때 이 세 가지의 값을 입력하지 않으면 요청 JSON은 다음과 같은 형태로 전송됩니다.
 
 ```java
-POST /
-themes HTTP/1.1
+POST /themes HTTP/1.1
 content-type:application/json 
 
 {
@@ -133,8 +132,7 @@ Validation failed for...
 모든 값을 선택하지 않고 요청을 보냈는데…
 
 ```java
-POST /
-reservations HTTP/1.1
+POST /reservations HTTP/1.1
 content-type:application/json 
 
 {
@@ -145,7 +143,7 @@ content-type:application/json
 }
 ```
 
-위와 같이 날짜는 빈 값으로 입력되었으나 회원, 테마, 시간의 경우 각각 “멤버 선택”, “테마 선택”, “시간 선택”이라는 값으로 요청이 되고 있었습니다.
+위와 같이 <U>**날짜는 빈 값으로 입력되었으나 회원, 테마, 시간의 경우 각각 “멤버 선택”, “테마 선택”, “시간 선택”이라는 값으로 요청이 되고 있었습니다.**</U>
 
 ```java
 public record AdminReservationCreateRequest(
@@ -372,3 +370,6 @@ public ErrorResponse handleHttpMessageNotReadableException(HttpServletRequest re
 작성하기엔 글이 너무 길어지겠다는 생각에 이 부분은 다음 편에 별도로 작성하겠습니다 🙇
 
 여기까지 읽어주셔서 감사합니다. 즐거운 하루 보내세요😄
+
+```toc
+```
