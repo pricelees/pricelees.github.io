@@ -67,7 +67,7 @@
   font-family: $font-family;
   font-size: 16px;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.8;
   word-wrap: break-word;
 }
 
@@ -95,7 +95,7 @@
 
 .markdown h1 {
   font-size: 2em;
-  margin: 0.67em 0;
+  margin: 0.5em 0;
 }
 
 .markdown img {
@@ -106,7 +106,7 @@
 .markdown kbd,
 .markdown pre {
   font-family: monospace, monospace;
-  font-size: 1em;
+  font-size: 8px;
 }
 
 .markdown hr {
@@ -189,8 +189,8 @@
 
 .markdown kbd {
   display: inline-block;
-  padding: 3px 5px;
-  font: 11px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  padding: 10px 10px;
+  font: 10px SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   line-height: 10px;
   color: #444d56;
   vertical-align: middle;
@@ -284,7 +284,7 @@
 .markdown code,
 .markdown pre {
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
-  font-size: 12px;
+  font-size: 8px;
 }
 
 .markdown code.language-text {
@@ -825,7 +825,7 @@
 .markdown pre>code {
   padding: 0;
   margin: 0;
-  font-size: 100%;
+  font-size: 80%;
   word-break: normal;
   white-space: pre;
   background: transparent;
