@@ -11,7 +11,7 @@ categories: level2 Spring Exception
 
 [우아한테크코스의 두 번째 스프링 미션](https://github.com/pricelees/spring-roomescape-member/tree/step2)을 통해 처음으로 스프링의 예외 처리를 경험하게
 되었습니다. 미션의 요구 사항은 예약, 테마, 시간 생성시 발생하는 예외를 적절하게 처리하는 것이었는데요, `지나간 날짜에 대한 예약은 불가능하다` 와 `입력된 ID에 대한 값이 DB에 없는` 것과 같은 예외 처리는 크게 어렵지 않았으나 입력에서의
-예외, 즉 **값을 입력하지 않은 것과 같이 값 자체가 잘못되었을 때**에 대한 처리가 가장 어려웠습니다. 
+예외, 즉 **입력되지 않은 값 등 값 자체가 잘못되었을 때**에 대한 처리가 가장 어려웠습니다.
 
 가장 많이 헤맸던 이유는 요청 상황마다 발생하는 예외 타입이 달랐기 때문인데요, 이번 글을 통해 이 문제를 어떻게 풀어갔는지에 대해 기록해보고자 합니다.
 
@@ -38,7 +38,7 @@ content-type: application/json
 관리자가 직접 예약을 추가할 땐, 예약 페이지에서 이미 등록된 회원, 테마, 시간과 날짜를 선택합니다. 이때 **회원, 테마, 시간은** **DB에 저장된 ID값으로 요청**됩니다. (DB에 회원1의 ID가 1로
 저장되어있다면, 관리자는 회원1을 선택하는데 요청은 이 회원의 ID인 1로 보내집니다)
 
-</br>
+<br/>
 
 ### API - 테마 추가
 
@@ -55,7 +55,7 @@ content-type: application/json
 
 테마를 추가할땐, 이름, 설명, 썸네일 주소를 입력받습니다. 이 값은 모두 문자열입니다.
 
-</br>
+<br/>
 
 ### API - 시간 추가
 
@@ -70,7 +70,7 @@ content-type: application/json
 
 시간을 추가할 땐, HH:mm 형태의 시간값을 입력받습니다.
 
-</br>
+<br/>
 
 ## 문제 상황
 
@@ -124,7 +124,7 @@ org.springframework.web.bind.MethodArgumentNotValidException:
 Validation failed for...
 ```
 
-</br>
+<br/>
 
 ### ⭐️ 예약을 추가할 때 값을 입력하지 않는다면? - InvalidFormatException
 
@@ -182,7 +182,7 @@ Caused by:com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot dese
 - MethodArgumentNotValidException 은 날짜, 시간, 테마 이름, 테마 설명, 테마 썸네일
 - InvalidFormatException(HttpMessageNotReadableException) 은 회원 ID, 테마 ID, 시간 ID
 
-</br>
+<br/>
 
 ## 예외 응답 DTO
 
@@ -196,7 +196,7 @@ public record ErrorResponse(String url, String method, String message) {
 이 DTO는 **요청 url, 요청 HTTP 메서드, 예외 메시지**로 구성하였습니다.(**이번 단계에서는 실제 응답 값으로 디버깅을 했기 때문에** 위와 같이 구성했고, 이후에 로깅을 시도함에 따라 예외 응답
 객체의 구성을 바꾸게 되었습니다 ㅎㅎ)
 
-</br>
+<br/>
 
 ## MethodArgumentNotValidException 처리
 
@@ -227,7 +227,7 @@ Baeldung의 글에서는 `getFieldErrors()` 를 이용하여 모든 예외를 �
 
 - 테스트를 할 때, 단순히 HTTP 코드로 확인하는 경우 문제가 없겠지만 구체적인 예외 메시지에 대한 테스트는 불가능해지게 됩니다.
 
-</br>
+<br/>
 
 ### 2. 여러 값에서 예외가 발생하면, 모든 예외 메시지를 합쳐서 출력하자.
 
@@ -246,7 +246,7 @@ public ErrorResponse handleMethodArgumentNotValidException(HttpServletRequest re
 
 Baeldung에서는 For문을 이용하여 처리하지만, Stream을 이용하여 모든 예외 메시지를 `“, “`로 구분하여 합치는 방식으로 구현하였습니다.
 
-</br>
+<br/>
 
 ### 결과
 
@@ -268,7 +268,7 @@ Baeldung에서는 For문을 이용하여 처리하지만, Stream을 이용하여
 
 응답 결과가 원하는대로 잘 출력됨을 확인할 수 있었습니다😀
 
-</br>
+<br/>
 
 ## InvalidFormatException 처리
 
@@ -299,7 +299,7 @@ public ErrorResponse handleInvalidFormatException(HttpServletRequest request, In
 
 따라서, 이후의 과정에서는 InvalidFormatException이 아닌 `HttpMessageNotReadableException`으로 작성하겠습니다.
 
-</br>
+<br/>
 
 ### 우선 다 뽑아보겠습니다.
 
@@ -323,7 +323,7 @@ e.getMessage() = JSON parse error: Cannot deserialize value of type `java.lang.L
 
 출력 결과는 위와 같이 되는데, 앞 부분은 크게 의미 없고 뒤에 있는 **“테마 선택”** 부분은 활용할 수 있을 것 같습니다.
 
-</br>
+<br/>
 
 ### 1차 시도
 
@@ -352,7 +352,7 @@ public ErrorResponse handleHttpMessageNotReadableException(HttpServletRequest re
 
 단순하게, 이전에 발생한 예외 메시지를 참고하여 String의 contains를 이용하여 처리하는 방식입니다.
 
-</br>
+<br/>
 
 ### 문제점
 
@@ -360,9 +360,9 @@ public ErrorResponse handleHttpMessageNotReadableException(HttpServletRequest re
 
 1. 지금의 예외 핸들링은, 테마, 시간, 멤버를 선택하지 않았을 때 기본 입력값인 `“테마 선택”` 등에 의존합니다. **즉 클라이언트 코드에 완전히 의존하는 구조입니다.**
 2. 멤버, 시간, 테마 중 2개 이상의 값이 입력되지 않아도 하나의 값만 표시됩니다. 즉 **입력되지 않은 모든 값을 예외 메시지에 담을 수 없습니다.**
-    - 추가적으로, 날짜를 입력하지 않았을 때 발생하는 MethodArgumentNotValidException와 같이 묶어서 처리할 수도 없습니다!
+   - 추가적으로, 날짜를 입력하지 않았을 때 발생하는 MethodArgumentNotValidException와 같이 묶어서 처리할 수도 없습니다!
 
-</br>
+<br/>
 
 ## 다음 편에 계속됩니다..
 
