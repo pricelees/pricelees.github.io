@@ -9,7 +9,12 @@ categories: level2 Spring Interceptor
 
 ## 배경
 
-[우아한테크코스의 두 번째 미션](https://github.com/pricelees/spring-roomescape-member/tree/step2)에서의 새로운 요구사항은 JWT를 이용해 로그인 기능을 구현하고, 역할에 따라 접근 권한을 다르게 설정하는 것이었습니다. 요구사항에 명시된 것은 **로그인 된 회원이 직접 예약을 추가하는 기능 구현**과 **관리자 페이지접근을 제한**하는 것이었는데요, 이 두 가지와 더불어 **관리자와 회원의 역할을 조금 더 명확하게 나누기 위해** Spring Interceptor를 이용했던 경험을 기록하고자 합니다.
+[우아한테크코스의 두 번째 미션](https://github.com/pricelees/spring-roomescape-member/tree/step2)에서의 새로운 요구사항은 JWT를 이용해 로그인 기능을 구현하고, 역할에 따라 접근 권한을 다르게 설정하는 것이었습니다. 
+요구사항에 명시된 것은 **로그인 된 회원이 직접 예약을 추가하는 기능 구현**과 **관리자 페이지 접근을 제한**하는 것이었는데요, 이 두 가지와 더불어 **관리자와 회원의 역할을 조금 더 명확하게 나누기 위해** Spring Interceptor를 이용했던 경험을 기록하고자 합니다.
+
+글에서는 스프링 인터셉터를 두 가지 방식으로 구현합니다. 먼저 **경로를 지정하는 방법**을 사용하여 구현한 후, **커스텀 어노테이션을 이용한 방법**으로 개선해보겠습니다. 또한, **ArgumentResolver**를 사용하는 관점에 대해서도 작성하겠습니다. 
+
+<br/>
 
 ## API 분류
 
@@ -26,6 +31,8 @@ categories: level2 Spring Interceptor
 
 (일단 간단하게 작성하기 위해 `/weekly` 를 사용했고, `/themes/most-reserved-last-week?count=10` 와 같이 더 구체화 해서 사용할 수도 있겠습니다 ㅎㅎ)
 
+<br/>
+
 ### 2. 로그인 상태인 모든 회원(관리자 포함)
 
 | Endpoint | HTTP Method | 기능 |
@@ -36,6 +43,8 @@ categories: level2 Spring Interceptor
 | /logout | POST | 로그아웃 |
 
 날짜와 테마에 대한 모든 예약 시간 조회 기능은 이 시간이 예약된 시간인지에 대한 정보도 포함하고 있습니다. 예약된 시간이라면 예약 창에서 해당 시간을 선택할 수 없습니다. 또한, 회원은 테마를 선택할 수 있어야 하니 전체 테마를 조회하는 API에 역시 접근이 가능해야 합니다.
+
+<br/>
 
 ### 3. 관리자 전용
 
@@ -52,6 +61,8 @@ categories: level2 Spring Interceptor
 | /members | GET | 모든 회원 조회 |
 
 다음 문단에서는, 인터셉터를 적용해보기 전에 **인터셉터 메서드와 호출 순서**에 대해 간단하게 확인해보겠습니다😄
+
+<br/>
 
 ## (참고) 인터셉터 등록 순서와 호출 순서
 
@@ -145,6 +156,8 @@ testInterceptor1: afterCompletion
 1. `preHandle → 컨트롤러 메서드 → postHandle → afterCompletion` 순으로 호출된다.
 2. `preHandle()`의 경우 **등록한 인터셉터 순서대로 호출**된다.
 3. `postHandle()`와 `afterCompletion()`의 경우 **등록한 인터셉터의 역순**으로 호출된다.
+
+<br/>
 
 ## 인터셉터 경로 직접 지정
 
@@ -242,6 +255,8 @@ void 로그인_하지_않아도_접근_가능하다(String path) {
 
 테스트는 위와 같이 RestAssured를 이용해 진행할 수 있습니다😄
 
+<br/>
+
 ### 문제점
 
 전체적으로 보면 간단한 방법인데, 지금의 방법에서 발생하는 몇몇 문제점이 있습니다.
@@ -251,6 +266,8 @@ void 로그인_하지_않아도_접근_가능하다(String path) {
 3. 개인적인 생각이지만, 코드를 보고 이해하기 힘들 것 같다는 생각입니다. 컨트롤러 메서드를 보고 바로 관리자 전용인지, 회원 전용인지 판단할 수 있으면 좋을 것 같습니다.
 
 다음 문단에선, 커스텀 어노테이션을 이용한 인터셉터로 이 문제를 해결해 보겠습니다.
+
+<br/>
 
 ## 커스텀 어노테이션과 인터셉터
 
@@ -395,7 +412,9 @@ public class ReservationController {
 3. 개인적인 생각이지만, 코드를 보고 이해하기 힘들 것 같다는 생각입니다. 컨트롤러 메서드를 보고 바로 관리자 전용인지, 회원 전용인지 판단할 수 있으면 좋을 것 같습니다.
     - 이전에는 `WebMvcConfiguration` 에 등록된 인터셉터 적용 경로와 컨트롤러 메서드를 둘다 확인해야 했지만, 이제 컨트롤러 메서드 안에서 모두 파악할 수 있게 되었습니다.
 
-## 🧐 ArgumentResolver 사용?
+<br/>
+
+## 🧐ArgumentResolver 사용?
 
 Spring Interceptor가 아닌 ArgumentResolver를 이용하여 비슷한 방식으로 해결할 수도 있습니다. 아래의 코드처럼 `PARAMETER` 에 적용되는 어노테이션을 만들고, 이를 이용한 ArgumentResolver를 구현합니다. Admin은 말 그대로 관리자, Authenticated는 로그인 된 회원을 조회할 때 사용하겠습니다.
 
@@ -430,6 +449,8 @@ public .. getAllThemes(@Authenticated Long memberId) {
 
 만약 모든 접근 권한이 필요한 컨트롤러 메서드가 `memberId` 라는 값을 필요로 한다면 `ArgumentResolver`를 사용하는게 더 간단할 것이라고 생각합니다. 하지만, `GET /themes` 와 같은 요청에는 예약 추가와 같이 회원 ID를 직접적으로 사용할 일이 없고, 단순히 권한 체크에만 사용하기 때문에 Interceptor를 사용하는 것이 더 낫다고 판단했습니다.
 
+<br/>
+
 ## 결론
 
 ### 요약
@@ -438,6 +459,8 @@ public .. getAllThemes(@Authenticated Long memberId) {
 2. 인터셉터를 만들고, WebMvcConfigurer에서 경로를 직접 지정할 수 있으나, 이 방법은 **동일한 경로에 다른 HTTP 메서드를 사용하는 경우를 구분할 수 없다**는 큰 단점이 존재한다.
 3. 커스텀 어노테이션을 통해 인터셉터를 구현하는 방법으로 이 문제를 해결할 수 있다.
 4. 모든 경우에 메서드 파라미터를 사용한다면 ArgumentResolver의 사용을 고려해 볼 수 있다.
+
+<br/>
 
 미션을 진행할 때는 저도 간단한 사용법만 익히고 뚜다다닥(?) 사용했었는데, 글을 작성하는 과정에서 다시 하나하나 확인해보는 즐거움이 있네요 ㅎㅎ
 
