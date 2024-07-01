@@ -446,7 +446,7 @@ public JavaTimeModule javaTimeModule() {
 
 캐스팅이 불편하다면 위와 같이 등록해도 됩니다!
 
-1. `ObjectMapper` 빈 등록
+2. `ObjectMapper` 빈 등록
 
 ```java
 @Configuration
@@ -492,7 +492,7 @@ void date_deserialize(String date, int expectedStatusCode) {
 
 이전에 컨트롤러 코드에서, 예외 발생시 400 응답을 하도록 ExceptionHandler를 정의하였기에 올바르지 않은 형식의 날짜로 요청을 하면 400 응답이 발생해야 합니다.
 
-1. 시간에 대한 역직렬화 테스트
+2. 시간에 대한 역직렬화 테스트
 
 ```java
 @ParameterizedTest(name = "{0} 형식의 시간에 대한 역직렬화 요청시 {1} 코드를 반환한다.")
@@ -514,7 +514,7 @@ void time_deserialize(String time, int expectedStatusCode) {
 
 날짜의 경우와 거의 동일하고, @JsonFormat을 지정하지 않았다면 “12:30:00”도 정상적으로 변환이 되어야 하지만 형식을 “HH:mm”으로 지정하였기에 예외가 발생하는 것을 확인할 수 있습니다.
 
-1. 직렬화 테스트
+3. 직렬화 테스트
 
 편의를 위해 data.sql에 다음과 같은 데이터를 추가하였습니다.
 
