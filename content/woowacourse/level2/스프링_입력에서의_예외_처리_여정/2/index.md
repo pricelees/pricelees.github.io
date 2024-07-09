@@ -18,6 +18,8 @@ categories: level2 Spring Exception
 
 **결론: 하나의 요청에서 다른 타입의 예외들이 발생하는데 이 예외를 한 번에 처리할 수가 없었습니다.**
 
+<br/>
+
 ## Custom Deserializer 시작
 
 지금 현재의 문제를 크게 보면 **역직렬화** 과정에서 발생하는 문제이고, 이 문제를 해결하기 위해 Deserializer를 키워드로 구글링을 하던 도중, [Baeldung의 글](https://www.baeldung.com/jackson-deserialization)을 찾게 되었습니다.
@@ -37,7 +39,9 @@ public record AdminReservationCreateRequest(
 }
 ```
 
-**@NotNull** 어노테이션은 Postman을 이용하여 확인해보니, **JSON에 해당 필드 자체가 없는 상황**에서 예외를 던지고 있었습니다. 하지만 페이지에서 직접 예약을 추가할 땐, 필드 자체가 없는 상황이 없으므로.. 지금 상황에서는 크게 의미가 없었습니다.
+Postman을 이용하여 확인해보니, **@NotNull** 어노테이션은 **JSON에 해당 필드 자체가 없는 상황**에서 예외를 던지고 있었습니다. 하지만 페이지에서 직접 예약을 추가할 땐, 필드 자체가 없는 상황이 없으므로.. 지금 상황에서는 크게 의미가 있진 않았습니다.
+
+<br/>
 
 ```java
 public class AdminReservationCreateRequestDeserializer extends StdDeserailizer<AdminReservationCreateRequest> {
@@ -56,7 +60,9 @@ public class AdminReservationCreateRequestDeserializer extends StdDeserailizer<A
 
 코드를 보니, 일단 JsonNode라는 객체를 먼저 꺼내옵니다. 어찌됐든 이 객체를 활용하는 것이기에, `getCodec().readTree()`  부분은 그냥 이렇게 불러오는구나 ~ 하고 넘어갔습니다. 자연스레 다음 의문은 JsonNode가 무엇인지로 이어집니다.
 
-사실 이번 문제는 getter를 그냥 느낌대로 쓰다보니 어느정도 해결이 되었는데요, Custom Deserializer는 추후에도 충분히 사용할 수 있다고 생각되어 이번 기회에 JsonNode도 이해를 하면 좋을 것 같다고 생각했습니다.
+사실 이번 문제는 getter를 그냥 느낌대로 쓰다보니 어느정도 해결이 되었는데요, Custom Deserializer는 추후에도 충분히 사용할 수 있다고 생각되어 이번 기회에 JsonNode도 이해하면 좋겠다고 생각했습니다.
+
+<br/>
 
 ## JsonNode가 뭔가요?
 
@@ -76,6 +82,8 @@ public class AdminReservationCreateRequestDeserializer extends StdDeserailizer<A
 
 사실 처음 읽었을 땐, **음.. 그렇구나..** 라는 생각만 들더라구요. 이 문서에선 그냥 `JSON 값들을 트리 형태로 구성하는 거구나. getter를 통해 값을 꺼낼 수 있구나` 정도만 일단 파악하는게 합리적이라고 생각했습니다.
 
+<br/>
+
 ### JsonNode 구성
 
 ```java
@@ -86,17 +94,23 @@ public abstract class JsonNode extends JsonSerializable.Base implements TreeNode
 }
 ```
 
-소스코드를 확인해보니, 우선 기본적으로 JsonNode는 `TreeNode` 인터페이스를 구현하고 있고, 그 아래에 JsonNode를 상속받는 클래스들이 존재했습니다. 상속받는 클래스들은 `com.fasterxml.jackson.databind.node` 패키지에 존재했는데요, **Intellij의 다이어그램 기능**을 활용해서 다이어그램을 그려보면 다음과 같습니다.
+소스코드를 확인해보니, 우선 기본적으로 JsonNode는 `TreeNode` 인터페이스를 구현하고 있고, 그 아래에 JsonNode를 상속받는 클래스들이 존재했습니다. 상속받는 클래스들은 `com.fasterxml.jackson.databind.node` 패키지에 존재했는데요, **Intellij의 다이어그램 기능**을 활용해 보겠습니다.
+
+<br/>
 
 ![jsonnode_diagram.png](jsonnode_diagram.png)
 
-이 다이어그램을 보고 아래의 세가지를 생각(추측)할 수 있었습니다.
+이 다이어그램을 보고, 저는 아래의 세 가지를 생각(추측)할 수 있었습니다.
 
 1. JsonNode는 ValueNode와 ContainerNode로 구분할 수 있다.
 2. ValueNode 하위의 노드들과 ContainerNode 하위의 노드들을 보니, ValueNode는 값을 저장하는 노드이고 ContainerNode는 Json 자체 혹은 하위의 배열을 저장하는 노드일 것이라고 추측할 수 있다.
 3. 그러면, `JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);` 를 이용하여 꺼낸 노드는 **ContainerNode**일 것이고, 여기서 getter를 사용하면 ValueNode를 얻어낼 수 있을 것 같다.
 
-실제로 확인해 보겠습니다. JsonNode에는 타입과 관련한 enum이 존재합니다. 지금은 그냥 이런 종류들이 있구나 ~ 정도만 생각해도 충분한 것 같습니다.
+이 추측을 바탕으로 실제로 확인 해 보기 전에, JsonNode의 소스 코드를 보며 Type에 대해 조금 더 알아보겠습니다.
+
+<br/>
+
+### JsonNode의 타입
 
 ```java
 public enum JsonNodeType {
@@ -114,8 +128,10 @@ public enum JsonNodeType {
     }
 }
 ```
+JsonNode는, 위의 Enum을 통해 타입을 분류하고 있습니다. 이름만으로도 어느정도 유추가 가능하네요. 
 
-다음으로 JsonNode 소스코드를 보면, 타입 체크와 관련된 메서드들이 있습니다. 더 있긴 하지만, 지금은 ValueNode와 ContainerNode인지 여부를 확인하는 메서드와 JsonNodeType에 대한 getter 정도만 알면 될 것 같습니다.
+<br/>
+
 
 ```java
 public final boolean isValueNode() {
@@ -137,9 +153,17 @@ public final boolean isContainerNode() {
 public abstract JsonNodeType getNodeType();
 ```
 
+위의 `JsonNodeType` enum과 이 JsonNode의 코드를 보면, 타입은 다음과 같이 구분할 수 있겠네요.
+1. `ARRAY, OBJECT`는 `ContainerNode`이다.
+2. `MISSING`은 `ValueNode도, ContainerNode도 아니다.`
+3. `나머지는 ValueNode`이다.
+
+
+<br/>
+
 ### get() vs path()와 MissingNode
 
-실제로 노드를 꺼내서 확인해보기 전에, `get()`과 `path()` 에 대해 짚고 가는게 좋을 것 같습니다.
+실제로 노드를 꺼내서 확인해보기 전에, `get()`과 `path()`, 그리고 `MissingNode`에 대해 한번 더 언급하고 가겠습니다. 
 
 ```java
 JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
@@ -149,6 +173,8 @@ JsonNode jsonNode2 = rootNode.path("jsonNode");
 ```
 
 **(미리 스포하자면 rootNode는 JsonNode를 상속받는 ObjectNode 타입입니다.)** 위 코드만 보면, get과 path는 크게 달라보이지 않습니다. 그러면 어떤 것을 사용해야 할까요?
+
+<br/>
 
 JsonNode를 상속받는 ObjectNode의 소스코드를 확인해 보겠습니다.
 
@@ -173,9 +199,11 @@ public class ObjectNode extends ContainerNode<ObjectNode> implements Serializabl
 
 이 코드를 보면, **get은 Json에 필드가 없으면 null을, path는 MissingNode 타입 객체를 반환**하는 것을 알 수 있습니다. **저는 앞으로 NPE 방지를 위해 path()를 사용하겠습니다!**
 
+<br/>
+
 ### 🚀 타입을 직접 확인해 보겠습니다.
 
-우선, 테스트에 사용할 JSON은 다음과 같습니다.
+우선, 다음과 같은 JSON과 여기에 대응되는 DTO 객체를 만들어 보겠습니다.
 
 ```json
 {
@@ -190,7 +218,7 @@ public class ObjectNode extends ContainerNode<ObjectNode> implements Serializabl
 }
 ```
 
-이 JSON에 대응되는 요청 DTO 객체도 하나 만들겠습니다.
+
 
 ```java
 @JsonDeserialize(using = JsonTestRequestDeserializer.class)
@@ -201,7 +229,9 @@ public record JsonTestRequest(Long number, String string, Object nullObject, Boo
 
 (미리 스포할 수 밖에 없네요 ㅠㅠ) 마지막에 다룰 Custom Deserializer는 해당되는 객체에 `@JsonDeserialize`를 붙여 적용할 수 있습니다 ㅎㅎ
 
-마지막으로, Custom Deserializer를 만들어 보겠습니다! (메서드만 작성하겠습니다)
+<br/>
+
+마지막으로, Custom Deserializer를 대략적으로 만들어 보겠습니다! (메서드만 작성하겠습니다)
 
 ```java
 @Override
@@ -235,8 +265,11 @@ public JsonTestRequest deserialize(JsonParser jsonParser, DeserializationContext
 }
 ```
 
-이전 문단에서 언급했던 것 처럼, MissingNode를 체크하기 위해 get()이 아닌 path()를 사용했고 이렇게 얻어낸 노드들의 타입을 출력한 뒤 DTO로 매핑하고 있습니다. `asLong(), asText()` 와 같은 것은 이후에 작성하겠습니다.
+이전 문단에서 언급했던 것 처럼, `MissingNode`를 체크하기 위해 get()이 아닌 `path()`를 사용했고 이렇게 얻어낸 노드들의 타입을 출력한 뒤 DTO로 매핑하고 있습니다. `asLong(), asText()` 와 같은 것은 이후에 작성하겠습니다.
 
+<br/>
+
+실제로 코드를 실행해보면 다음과 같은 결과가 나오구요,
 ```java
 rootNode.getNodeType() = OBJECT
 numberNode.getNodeType() = NUMBER
@@ -247,18 +280,21 @@ objectListNode.getNodeType() = OBJECT
 missingNode.getNodeType() = MISSING
 ```
 
-출력 결과를 정리해보면,
+출력 결과를 정리해보면
 
 1. 전체 JSON인 rootNode와, JSON 내부의 배열인 objectListNode는 ObjectNode가 됩니다.
     - **이 노드들은 내부에 여러 값을 가지고 있기에, ContainerNode에 해당됩니다.**
 2. 나머지 노드들은, 각각 **값을 가지고 있는 ValueNode**에 속합니다.
-3. 위의 Json에 “missing” 필드는 없기 때문에, missingNode는 MissingNode 타입이 됩니다.
+3. 위의 Json에 `“missing”` 필드는 없기 때문에, missingNode는 MissingNode 타입이 됩니다.
 
 ```java
 JsonTestRequest[number=1, string=text, nullObject=null, booleanObject=true, objectList=[1, "text"]]
 ```
 
 마지막으로, 만들어진 `JsonTestRequset`  객체를 출력해보면, 값이 잘 들어간 것을 확인할 수 있습니다 ㅎㅎ
+
+<br/>
+
 
 ## JsonNode에서 값 꺼내기
 
@@ -267,7 +303,7 @@ JsonNode에서 get(), path() 등을 하다 보면, 값을 가지고 있는 Value
 > 만약 ContainerNode라면 get(), path()를 또 적용해서 ValueNode를 얻어내야 합니다 ㅎㅎ
 >
 
-그러면, ValueNode에서의 값은 어떻게 꺼낼 수 있을까요? 값은 `숫자, 불리언, 문자열 타입`으로 가져올 수 있습니다. 기본값을 지정할 수도 있지만, 이번에는 기본값을 지정하지 않는 경우를 위주로 확인하겠습니다.
+그러면, ValueNode에서의 값은 어떻게 꺼낼 수 있을까요? 값은 `숫자, 불리언, 문자열 타입`으로 가져올 수 있습니다. 기본값을 지정할 수도 있지만, **이번에는 기본값을 지정하지 않는 경우를 위주로 확인** 하겠습니다.
 
 ### 1. 숫자 값 꺼내기
 
