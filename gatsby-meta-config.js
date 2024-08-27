@@ -14,7 +14,7 @@ module.exports = {
     name: `이상진`,
     bio: {
       role: `개발자 지망생`,
-      description: ['뛰어난 사람보단 좋은 사람이 되고싶은', '소통을 중요시하는', '상대방을 존중하는'],
+      description: ['뛰어난 사람보단 따뜻한 사람이 되고싶은', '소통을 중요시하는', '상대방을 존중하는'],
       thumbnail: '', // Path to the image in the 'asset' folder
     },
     social: {
