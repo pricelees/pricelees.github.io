@@ -1,4 +1,4 @@
-import { useStaticQuery, graphql } from 'gatsby';
+import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
@@ -55,6 +55,10 @@ function Seo({ description, title }) {
         {
           property: `og:type`,
           content: `website`,
+        },
+        {
+          name: 'google-site-verification',
+          content: 'GgOGKF91334EYfaQkmmkbYIjoDUGqebCdEC3CkbLAIA',
         },
       ]}
     />
