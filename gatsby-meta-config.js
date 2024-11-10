@@ -2,7 +2,7 @@ module.exports = {
   title: `상돌로그`,
   description: `상돌로그`,
   language: `ko`, // `ko`, `en` => currently support versions for Korean and English
-  siteUrl: `https://pricelees.github.com`,
+  siteUrl: `https://pricelees.github.io`,
   ogImage: `/sangdol.jpg`, // Path to your in the 'static' folder
   comments: {
     utterances: {
