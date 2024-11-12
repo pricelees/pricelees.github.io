@@ -134,8 +134,12 @@
 <p>그럼에도 해당 내용에 관심을 가져준 테니에게 감사드리며..ㅎㅎ 이번 내용은 저도 정말 최선을 다해 작성해 보겠습니다.</p>
 </blockquote>
 <ol start="2">
-<li>본 글에서는 해당 과정을 실제 적용해보는 과정을 위주로 다룹니다. 따라서 AWS-CLI를 우분투에 설치하고 IAM을 등록하는 등의 과정은 생략합니다.</li>
+<li>본 글에서는 해당 과정을 실제 적용해보는 과정을 위주로 다룹니다. 따라서 AWS-CLI를 우분투에 설치하고 IAM을 등록하는 등의 기본적인 과정은 생략합니다.</li>
 </ol>
+<blockquote>
+<p>AWS-CLI 설치는 <a href="https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html">공식 문서</a>를 확인해주시고,
+IAM 계정에는 ElasticLoadBalancingFullAccess 권한을 추가해주세요!</p>
+</blockquote>
 <br/>
 <h2 id="인스턴스-등록-취소하기" style="position:relative;"><a href="#%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EB%93%B1%EB%A1%9D-%EC%B7%A8%EC%86%8C%ED%95%98%EA%B8%B0" aria-label="인스턴스 등록 취소하기 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>인스턴스 등록 취소하기</h2>
 <h3 id="등록-취소-지연-시간-설정" style="position:relative;"><a href="#%EB%93%B1%EB%A1%9D-%EC%B7%A8%EC%86%8C-%EC%A7%80%EC%97%B0-%EC%8B%9C%EA%B0%84-%EC%84%A4%EC%A0%95" aria-label="등록 취소 지연 시간 설정 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>등록 취소 지연 시간 설정</h3>
