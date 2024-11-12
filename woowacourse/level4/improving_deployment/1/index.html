@@ -132,6 +132,7 @@
 <blockquote>
 <p>25초에 대한 자세한 내용은 아래에서 다루겠습니다.</p>
 </blockquote>
+<br/> 
 <h3 id="2-배포-시작" style="position:relative;"><a href="#2-%EB%B0%B0%ED%8F%AC-%EC%8B%9C%EC%9E%91" aria-label="2 배포 시작 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. 배포 시작</h3>
 <p>이후의 배포 과정은 다음 순서로 진행됩니다.</p>
 <ol>
@@ -244,6 +245,7 @@
 <p>사진은 <strong>sar -r 1</strong> 명령어로 1초 단위로 변화를 관찰한 뒤, 필요한 부분만 잘라붙였습니다.</p>
 </blockquote>
 <p>실제 메모리 변화를 관찰해보면, 빌드 중 최대 <code class="language-text">68.17%</code>까지 메모리 사용률이 올랐고, 빌드가 끝난 뒤 <code class="language-text">49%</code>대까지 떨어짐을 확인할 수 있는데요, gradle build 자체가 메모리를 상당히 많이 사용하는 작업이기에 기존의 springboot가 불필요하게 메모리를 점유하는 상황이 서버의 부하로 이어질 수 있습니다.</p>
+<br/>
 <h3 id="2-graceful-shutdown이-적용이-되도-문제가-발생할-수-있습니다" style="position:relative;"><a href="#2-graceful-shutdown%EC%9D%B4-%EC%A0%81%EC%9A%A9%EC%9D%B4-%EB%90%98%EB%8F%84-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%A0-%EC%88%98-%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4" aria-label="2 graceful shutdown이 적용이 되도 문제가 발생할 수 있습니다 permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Graceful Shutdown이 적용이 되도 문제가 발생할 수 있습니다.</h3>
 <p>이전에 언급한 대로 기존의 springboot를 종료하는 시점에서는 처리할 요청이 없어 graceful shutdown이 사실상 적용되지 않겠지만, 그럼에도 발생할 수 있는 문제 상황을 가정해 보겠습니다.</p>
 <ol>
