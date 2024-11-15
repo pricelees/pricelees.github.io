@@ -66,6 +66,8 @@ public class HealthCheckController {
 > 25초에 대한 자세한 내용은 아래에서 다루겠습니다.
 >
 
+<br/> 
+
 ### 2. 배포 시작
 
 이후의 배포 과정은 다음 순서로 진행됩니다.
@@ -126,6 +128,8 @@ public class HealthCheckController {
 >
 
 실제 메모리 변화를 관찰해보면, 빌드 중 최대 `68.17%`까지 메모리 사용률이 올랐고, 빌드가 끝난 뒤 `49%`대까지 떨어짐을 확인할 수 있는데요, gradle build 자체가 메모리를 상당히 많이 사용하는 작업이기에 기존의 springboot가 불필요하게 메모리를 점유하는 상황이 서버의 부하로 이어질 수 있습니다.
+
+<br/>
 
 ### 2. Graceful Shutdown이 적용이 되도 문제가 발생할 수 있습니다.
 
